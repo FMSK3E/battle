@@ -1,6 +1,6 @@
 #include "includes/main_header.h"
 
-void				pick_units_players(t_map **map, t_characters *players, int owner)
+void				ft_pick_units_players(t_map **map, t_characters *players, int owner)
 {
 	int		i;
 	int		nb_units;
@@ -22,18 +22,18 @@ void				pick_units_players(t_map **map, t_characters *players, int owner)
 			printf("\n\nUnit %d :\n", i + 1);
 			scanf("%s", answer);
 			if (strstr(answer, "S") || strstr(answer, "s"))
-				players[owner].units_owned[i] = pick_swordsmen(map, owner);
+				players[owner].units_owned[i] = ft_pick_swordsmen(map, owner);
 			else if (strstr(answer, "L") || strstr(answer, "l"))
-				players[owner].units_owned[i] = pick_lancers(map, owner);
+				players[owner].units_owned[i] = ft_pick_lancers(map, owner);
 			else if (strstr(answer, "C") || strstr(answer, "c"))
-				players[owner].units_owned[i] = pick_cavalry(map, owner);
+				players[owner].units_owned[i] = ft_pick_cavalry(map, owner);
 			else if (strstr(answer, "B") || strstr(answer, "b"))
-				players[owner].units_owned[i] = pick_bowmen(map, owner);
+				players[owner].units_owned[i] = ft_pick_bowmen(map, owner);
 			if (strstr(answer, "S") || strstr(answer, "s") || strstr(answer, "L") || strstr(answer, "l") || strstr(answer, "C") || strstr(answer, "c") || strstr(answer, "B") || strstr(answer, "b"))
 				i++;
 		}
 		nb_units = 0;	// Sinon, quand il y a deux joueurs, le jeu prend en suppose qu'il y a le même nombres de soldats et ne redemande pas
-		//	TESTS : l'unité est bien assignée à la carte et au personnage, quand on NULL sur la carte ça marche segfault si on cherche à y accéder mais ça ne casse pas le personnage.
+		//	TESTS : l'unité est bien assignée à la carte et au personnage, quand on NULL sur la carte ça marche segfault si on cherche à y accéder mais ça ne casse pas le personnage || quand on change quelque chose sur la carte ça ou le joueur ça fait sur l'autre aussi
 		/*
 		printf("%d\n", players[i].units_owned[j - 1]->pos_y);
 		printf("%d\n", map[0][7].unit_on_tile->pos_y);
@@ -42,7 +42,7 @@ void				pick_units_players(t_map **map, t_characters *players, int owner)
 		printf("%d\n", map[0][7].unit_on_tile->pos_y);*/
 }
 
-t_units				*pick_swordsmen(t_map **map, int owner)
+t_units				*ft_pick_swordsmen(t_map **map, int owner)
 {
 	t_units			*unit;
 	int				x;
@@ -63,13 +63,13 @@ t_units				*pick_swordsmen(t_map **map, int owner)
 	unit->strong_against = 'L';
 	unit->weak_against = 'B';
 	unit->used = 0;
-	printf("Choose the location of your unit (x y (ex : 10 10)) ! Player 1 can only go from 0 to 9 / Player 2, from 10 to 19 !\n");
+	printf("Choose the location of your unit (x y (ex : 10 10)) ! Player 1 can only go from 0/7y | Player 2, from 12/19y !\n");
 	while (!pos_ok)
 	{
 		scanf("%s %s", xc, yc);
 		x = atoi(xc);
 		y = atoi(yc);
-		if (((owner == 0 && x >= 0 && x <= 9 && y >= 0 && y <= 9) || (owner == 1 && x >= 10 && x <= 19 && y >= 10 && y <= 19)) && map[y][x].unit_on_tile == NULL)
+		if (((owner == 0 && y >= 0 && y <= 7) || (owner == 1 && y >= 12 && y <= 19)) && map[y][x].unit_on_tile == NULL)
 		{
 			unit->pos_x = x;
 			unit->pos_y = y;
@@ -82,17 +82,17 @@ t_units				*pick_swordsmen(t_map **map, int owner)
 	return (unit);
 }
 
-t_units				*pick_lancers(t_map **map, int owner)
+t_units				*ft_pick_lancers(t_map **map, int owner)
 {
 
 }
 
-t_units				*pick_cavalry(t_map **map, int owner)
+t_units				*ft_pick_cavalry(t_map **map, int owner)
 {
 
 }
 
-t_units				*pick_bowmen(t_map **map, int owner)
+t_units				*ft_pick_bowmen(t_map **map, int owner)
 {
 
 }

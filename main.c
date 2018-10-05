@@ -1,27 +1,3 @@
-#include "includes/main_header.h"
-
-int					move_unit(t_map **map, t_characters *players, int owner, int id, int new_x, int new_y)
-{
-	if (players[owner].units_owned[id]->pos_x + new_x < 0 || players[owner].units_owned[id]->pos_x + new_x > 19 || players[owner].units_owned[id]->pos_y + new_y < 0 || players[owner].units_owned[id]->pos_y + new_y > 19)
-	{	
-		printf("WARNING : You cannot move in this direction, you've reached map's borders !\n");
-		return (0);
-	}
-	else if (map[players[owner].units_owned[id]->pos_x + new_x][players[owner].units_owned[id]->pos_y + new_y].unit_on_tile != NULL)
-	{
-		printf("WARNING : An unit is already on the tile !\n");
-		return (0);
-	}
-	else
-	{
-		map[players[owner].units_owned[id]->pos_x][players[owner].units_owned[id]->pos_y].unit_on_tile = NULL;
-		players[owner].units_owned[id]->pos_x += new_x;
-		players[owner].units_owned[id]->pos_y += new_y;
-		map[players[owner].units_owned[id]->pos_x][players[owner].units_owned[id]->pos_y].unit_on_tile = players[owner].units_owned[id];
-	}
-	return (1);
-}
-
 void				player_action_unit(t_map **map, t_characters *players, int owner, int id, int *available_troops)
 {
 	int		answer_ok;

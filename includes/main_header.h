@@ -5,8 +5,9 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+//#include <SDL.h>
 
-#define clear_screen() printf("\033[H\033[J")
+#define clear_screen()				printf("\033[H\033[J")
 
 #define FONT_DEFAULT				"\x1b[0m"
 #define FONT_BLACK					"\x1b[30m"
@@ -79,16 +80,27 @@ t_characters		*characters_init(void);
 t_map				**map_init(int map_size_x, int map_size_y);
 
 //					print_stuff.c
-void				print_map(t_map **map, int map_size_x, int map_size_y, int nb_players, int owner, int enemy);
-int					show_enemy(t_map **map, int i, int j, int owner, int enemy);
-char				*select_font_color(t_map **map, int i, int j, int owner, int enemy);
-char				*select_background_color(t_map **map, int i, int j);
+void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players, int owner, int enemy);
+int					ft_show_enemy(t_map **map, t_units *unit, int owner, int enemy);
+char				*ft_select_font_color(t_map **map, int i, int j, int owner, int enemy);
+char				*ft_select_background_color(t_map **map, char terrain);
 
 //					pick_stuff.c
-void				pick_units_players(t_map **map, t_characters *players, int owner);
-t_units				*pick_swordsmen(t_map **map, int owner);
-t_units				*pick_lancers(t_map **map, int owner);
-t_units				*pick_cavalry(t_map **map, int owner);
-t_units				*pick_bowmen(t_map **map, int owner);
+void				ft_pick_units_players(t_map **map, t_characters *players, int owner);
+t_units				*ft_pick_swordsmen(t_map **map, int owner);
+t_units				*ft_pick_lancers(t_map **map, int owner);
+t_units				*ft_pick_cavalry(t_map **map, int owner);
+t_units				*ft_pick_bowmen(t_map **map, int owner);
+
+//					menus.c
+int					main_menu(t_map **map, t_characters *players, int owner, int enemy, int map_size_x, int map_size_y, int nb_players);
+void				units_manager_menu(t_map **map, t_characters *players, int owner, int enemy, int *available_units);
+void				unit_menu(t_map **map, t_characters *players, t_units *unit, int owner, int *available_units, int id);
+
+//					unit.c
+int					ft_move_unit(t_map **map, t_characters *players, t_units *unit, int new_x, int new_y);
+int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit, int owner);
+int					ft_calculate_attack_range(t_map **map, t_units *unit, t_units *target);
+int					ft_attack_unit(t_map **map, t_units *attacker, t_units *defender);
 
 #endif
