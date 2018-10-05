@@ -7,14 +7,14 @@ void				unit_menu(t_map **map, t_characters *players, t_units *unit, int owner, 
 
 	if (unit->used == 1)
 		return;
-	clear_screen();
-	printf("\n--------------------Unit %d - %s - %d/%d troops in unit - %dx / %dy\n", id, unit->type, unit->troops_in_unit, unit->max_troops_in_unit, unit->pos_x, unit->pos_y);
-	printf("Control the unit :\n\tZ : north\n\tQ : west\n\tS : south\n\tD : east\n\tA : attack\n");
 	while (answer_ok != 1)
 	{
+		clear_screen();
+		printf("\n--------------------Unit %d - %s - %d/%d troops in unit - %dx / %dy\n", id, unit->type, unit->troops_in_unit, unit->max_troops_in_unit, unit->pos_x, unit->pos_y);
+		printf("Control the unit :\n\tZ : north\n\tQ : west\n\tS : south\n\tD : east\n\tA : attack\n");
 		scanf("%s", answer);
 		if (strstr(answer, "A") || strstr(answer, "a"))	
-			ft_find_unit_to_attack(map, players, unit, owner);
+			answer_ok = ft_find_unit_to_attack(map, players, unit, owner);
 		else if (strstr(answer, "Q") || strstr(answer, "q"))
 			answer_ok = ft_move_unit(map, players, unit, -1, 0);
 		else if (strstr(answer, "S") || strstr(answer, "s"))

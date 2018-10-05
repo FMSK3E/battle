@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-//#include <SDL.h>
 
 #define clear_screen()				printf("\033[H\033[J")
 
