@@ -26,7 +26,7 @@ int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit
 {
 	int				i;
 	int				j;
-	int				k;
+	int				k;		// Nombre de cibles trouvées
 	char			target[5];
 	t_characters	temp;
 
@@ -56,7 +56,7 @@ int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit
 		if(strstr(target, "R") || strstr(target, "r"))
 			return (0);
 		else if (atoi(target) <= k && atoi(target) != 0)		// On empêche le 0 pour éviter les erreurs au cas où on appuierais sur e-d-f-t à la place de R, ce qui causerait l'attaque sur l'unité 0
-			return (ft_attack_unit(map, unit, temp.units_owned[atoi(target) - 1]));		// Au lieu d'une fonction void, on fait une fonction int qui retourne toujours 1, ça permet de  gagner 3 lignes
+			return (ft_attack_unit(map, unit, temp.units_owned[atoi(target) - 1], 0));		// Au lieu d'une fonction void, on fait une fonction int qui retourne toujours 1, ça permet de  gagner 3 lignes
 	}
 }
 
@@ -68,8 +68,26 @@ int					ft_calculate_attack_range(t_map **map, t_units *unit, t_units *target)
 	return (range);
 }
 
-int					ft_attack_unit(t_map **map, t_units *attacker, t_units *defender)
+int					ft_attack_unit(t_map **map, t_units *attacker, t_units *defender, int retaliation)
 {
-	defender->troops_in_unit = 55;
+	int		damage;
+
+	damage = attacker->troops_in_unit / 10;
+	if (defender->weak_against == attacker->sigle)				// Forces - Faiblesses
+		damage *= 1.2;
+	else if (defender->strong_against == attacker->sigle)
+		damage *= 0.8;
+
+	if (retaliation && attacker->sigle == 'B' && defender->sigle != 'B')		// Si des archers se défendent au càc
+		damage *= 0.3;
+	if (!retaliation && attacker->sigle == 'C' && defender->sigle != 'L')		// Charge de cavalerie hors lanciers
+		damage *= 1.8;
+	if (attacker->sigle == 'C' && defender->sigle == 'B')						// Charge de cavalerie contre archer
+		damage *= 2;
+	if (!retaliation && attacker->sigle != 'B' && defender->sigle == 'C');		// Si attaque d'infanterie contre cavalerie en défense
+		damage *= 1.3;
+	defender->troops_in_unit -= damage;					// Application des dommages
+	if (!retaliation && ft_calculate_attack_range(map, defender, attacker) <= defender->attack_range)		// Le défenseur attaque à son tour
+		ft_attack_unit(map, defender, attacker, 1);
 	return (1);
 }

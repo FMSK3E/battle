@@ -23,18 +23,15 @@ void				unit_menu(t_map **map, t_characters *players, t_units *unit, int owner, 
 			answer_ok = ft_move_unit(map, players, unit, 1, 0);
 		else if (strstr(answer, "Z") || strstr(answer, "z"))
 			answer_ok = ft_move_unit(map, players, unit, 0, -1);
-		else
-			printf("WARNING : Pick a valid answer !\n");
 	}
 	players[owner].units_owned[id]->used = 1;
 	(*available_troops)--;
 }
 
-void				units_manager_menu(t_map **map, t_characters *players, int owner, int enemy, int *available_troops)
+void				units_manager_menu(t_map **map, t_characters *players, int owner, int *available_troops)
 {
 	int		i;
-	int		answer;
-	char	answer_char[5];
+	char	answer[5];
 
 	while (1)
 	{
@@ -45,16 +42,15 @@ void				units_manager_menu(t_map **map, t_characters *players, int owner, int en
 		for (i = 0; i < players[owner].nb_units_owned; i++)
 			if (!players[owner].units_owned[i]->used)
 				printf("---> Unit %d - %s - %d/%d troops in unit - %dx / %dy\n", i + 1, players[owner].units_owned[i]->type, players[owner].units_owned[i]->troops_in_unit, players[owner].units_owned[i]->max_troops_in_unit, players[owner].units_owned[i]->pos_x, players[owner].units_owned[i]->pos_y);
-		scanf("%s", answer_char);
-		answer = atoi(answer_char);
-		if (answer >= 1 && answer <= 9 && players[owner].units_owned[answer - 1] != NULL)
-			unit_menu(map, players, players[owner].units_owned[answer - 1], owner, available_troops, answer - 1);
-		else if (answer == 10)
+		scanf("%s", answer);
+		if (atoi(answer) >= 1 && atoi(answer) <= 9 && players[owner].units_owned[atoi(answer) - 1] != NULL)
+			unit_menu(map, players, players[owner].units_owned[atoi(answer) - 1], owner, available_troops, atoi(answer) - 1);
+		else if (atoi(answer) == 10)
 			return;
 	}
 }
 
-int					main_menu(t_map **map, t_characters *players, int owner, int enemy, int map_size_x, int map_size_y, int nb_players)
+int					main_menu(t_map **map, t_characters *players, int owner, int map_size_x, int map_size_y, int nb_players)
 {
 	int		i;
 	int		available_troops;
@@ -68,14 +64,18 @@ int					main_menu(t_map **map, t_characters *players, int owner, int enemy, int 
 		if (!available_troops)
 			printf(" --- NO AVAILABLE TROOPS !");
 		printf("\n\t1 : manage your units\n\t2 : end the turn\n");
-		ft_print_map(map, map_size_x, map_size_y, nb_players, owner, enemy);
+		ft_print_map(map, map_size_x, map_size_y, nb_players, owner);
 		scanf("%s", answer);
 		if (strstr(answer, "1"))
 		{
 			if (available_troops)
-				units_manager_menu(map, players, owner, enemy, &available_troops);
+				units_manager_menu(map, players, owner, &available_troops);
 		}
 		else if (strstr(answer, "2"))
-			return 1;
+		{
+			for (i = 0; i < players[owner].nb_units_owned; i++)
+				players[owner].units_owned[i]->used = 0;
+			return (1);
+		}
 	}
 }

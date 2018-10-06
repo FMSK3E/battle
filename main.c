@@ -4,9 +4,9 @@ void				f(t_map **map, t_characters *players, int nb_players, int map_size_x, in
 {
 	while (players[0].nb_units_owned != 0 || players[1].nb_units_owned != 0)
 	{
-		while (main_menu(map, players, 0, 1, map_size_x, map_size_y, nb_players) != 1);
+		while (main_menu(map, players, 0, map_size_x, map_size_y, nb_players) != 1);
 		if (nb_players == 2)
-			while(main_menu(map, players, 1, 0, map_size_x, map_size_y, nb_players) != 1);
+			while(main_menu(map, players, 1, map_size_x, map_size_y, nb_players) != 1);
 		//else
 	}
 }

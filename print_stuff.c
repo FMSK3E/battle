@@ -1,6 +1,6 @@
 #include "includes/main_header.h"
 
-void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players, int owner, int enemy)
+void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players, int owner)
 {
 	int		i;
 	int		j;
@@ -9,23 +9,21 @@ void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players
 	for (i = 0; i < map_size_y; i++)
 	{
 		owner = 0;
-		enemy = 1 - owner;
 		for (j = 0; j < map_size_x; j++)
 		{
-			if (map[i][j].unit_on_tile != NULL && (map[i][j].unit_on_tile->owner == owner || (map[i][j].unit_on_tile->owner == 1 - owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner, enemy) == 1)))
-				printf("%s%s%c ", ft_select_font_color(map, i, j, owner, enemy), ft_select_background_color(map, map[i][j].terrain), map[i][j].unit_on_tile->sigle);
+			if (map[i][j].unit_on_tile != NULL && (map[i][j].unit_on_tile->owner == owner || (map[i][j].unit_on_tile->owner == !owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner) == 1)))
+				printf("%s%s%c ", ft_select_font_color(map, i, j, owner), ft_select_background_color(map, map[i][j].terrain), map[i][j].unit_on_tile->sigle);
 			else
-				printf("%s%s%c ", ft_select_font_color(map, i, j, owner, enemy), ft_select_background_color(map, map[i][j].terrain), map[i][j].terrain);
+				printf("%s%s%c ", ft_select_font_color(map, i, j, owner), ft_select_background_color(map, map[i][j].terrain), map[i][j].terrain);
 		}
 		printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 		owner = 1;
-		enemy = 1 - owner;
 		for (j = 0; j < map_size_x; j++)
 		{
-			if (map[i][j].unit_on_tile != NULL && (map[i][j].unit_on_tile->owner == owner || (map[i][j].unit_on_tile->owner == 1 - owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner, enemy) == 1)))
-				printf("%s%s%c ", ft_select_font_color(map, i, j, owner, enemy), ft_select_background_color(map, map[i][j].terrain), map[i][j].unit_on_tile->sigle);
+			if (map[i][j].unit_on_tile != NULL && (map[i][j].unit_on_tile->owner == owner || (map[i][j].unit_on_tile->owner == !owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner) == 1)))
+				printf("%s%s%c ", ft_select_font_color(map, i, j, owner), ft_select_background_color(map, map[i][j].terrain), map[i][j].unit_on_tile->sigle);
 			else
-				printf("%s%s  ", ft_select_font_color(map, i, j, owner, enemy), ft_select_background_color(map, map[i][j].terrain));
+				printf("%s%s  ", ft_select_font_color(map, i, j, owner), ft_select_background_color(map, map[i][j].terrain));
 		}
 		printf("\n");
 	}
@@ -33,7 +31,7 @@ void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players
 	printf(FONT_DEFAULT "\n\n");
 }
 
-int					ft_show_enemy(t_map **map, t_units *unit, int owner, int enemy)
+int					ft_show_enemy(t_map **map, t_units *unit, int owner)
 {
 	int		i;
 	int		j;
@@ -57,11 +55,11 @@ int					ft_show_enemy(t_map **map, t_units *unit, int owner, int enemy)
 	return (0);
 }
 
-char				*ft_select_font_color(t_map **map, int i, int j, int owner, int enemy)
+char				*ft_select_font_color(t_map **map, int i, int j, int owner)
 {
 	if (map[i][j].unit_on_tile != NULL && map[i][j].unit_on_tile->owner == owner)
 		return (FONT_BLUE);
-	else if (map[i][j].unit_on_tile != NULL && map[i][j].unit_on_tile->owner == enemy && ft_show_enemy(map, map[i][j].unit_on_tile, owner, enemy) == 1)
+	else if (map[i][j].unit_on_tile != NULL && map[i][j].unit_on_tile->owner != owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner) == 1)
 		return (FONT_RED);
 	else
 		return (FONT_DEFAULT);
