@@ -59,7 +59,8 @@ t_units				*ft_pick_swordsmen(t_map **map, int owner)
 	unit->spotting_range = 4;
 	unit->strong_against = 'L';
 	unit->weak_against = 'B';
-	unit->used = 0;
+	unit->max_actions = 2;
+	unit->current_actions = unit->max_actions;
 	printf("Choose the location of your unit (x y (ex : 10 10)) ! Player 1 can only go from 0/7y | Player 2, from 12/19y !\n");
 	while (!pos_ok)
 	{

@@ -1,6 +1,6 @@
 #include "includes/main_header.h"
 
-void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players, int owner)
+void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int owner)
 {
 	int		i;
 	int		j;
@@ -9,6 +9,7 @@ void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players
 	for (i = 0; i < map_size_y; i++)
 	{
 		owner = 0;
+		printf("\t");
 		for (j = 0; j < map_size_x; j++)
 		{
 			if (map[i][j].unit_on_tile != NULL && (map[i][j].unit_on_tile->owner == owner || (map[i][j].unit_on_tile->owner == !owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner) == 1)))
@@ -16,7 +17,7 @@ void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players
 			else
 				printf("%s%s%c ", ft_select_font_color(map, i, j, owner), ft_select_background_color(map, map[i][j].terrain), map[i][j].terrain);
 		}
-		printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+		printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 		owner = 1;
 		for (j = 0; j < map_size_x; j++)
 		{

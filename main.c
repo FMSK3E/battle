@@ -4,9 +4,9 @@ void				f(t_map **map, t_characters *players, int nb_players, int map_size_x, in
 {
 	while (players[0].nb_units_owned != 0 || players[1].nb_units_owned != 0)
 	{
-		while (main_menu(map, players, 0, map_size_x, map_size_y, nb_players) != 1);
+		while (main_menu(map, players, 0, map_size_x, map_size_y) != 1);
 		if (nb_players == 2)
-			while(main_menu(map, players, 1, map_size_x, map_size_y, nb_players) != 1);
+			while(main_menu(map, players, 1, map_size_x, map_size_y) != 1);
 		//else
 	}
 }
@@ -14,7 +14,9 @@ void				f(t_map **map, t_characters *players, int nb_players, int map_size_x, in
 int					main(void)
 {
 	/* TODO
-	Fonction de combat
+	Plus de paramètres pour les troupes
+	Fonction d'attaque plus développée ?
+	Fonction de calcul de range
 	IA
 	*/
 	int		i;

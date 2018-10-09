@@ -56,7 +56,7 @@ int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit
 		if(strstr(target, "R") || strstr(target, "r"))
 			return (0);
 		else if (atoi(target) <= k && atoi(target) != 0)		// On empêche le 0 pour éviter les erreurs au cas où on appuierais sur e-d-f-t à la place de R, ce qui causerait l'attaque sur l'unité 0
-			return (ft_attack_unit(map, unit, temp.units_owned[atoi(target) - 1], 0));		// Au lieu d'une fonction void, on fait une fonction int qui retourne toujours 1, ça permet de  gagner 3 lignes
+			return (ft_attack_unit(map, players, unit, temp.units_owned[atoi(target) - 1], 0));		// Au lieu d'une fonction void, on fait une fonction int qui retourne toujours 1, ça permet de  gagner 3 lignes
 	}
 }
 
@@ -68,11 +68,13 @@ int					ft_calculate_attack_range(t_map **map, t_units *unit, t_units *target)
 	return (range);
 }
 
-int					ft_attack_unit(t_map **map, t_units *attacker, t_units *defender, int retaliation)
+int					ft_attack_unit(t_map **map, t_characters *players, t_units *attacker, t_units *defender, int retaliation)
 {
 	int		damage;
+	int		unit_destroyed;			// Si une unité est détruite, pour éviter de lancer la fonction de contre attaque
 
-	damage = attacker->troops_in_unit / 10;
+	unit_destroyed = 0;
+	damage = attacker->troops_in_unit / 5;
 	if (defender->weak_against == attacker->sigle)				// Forces - Faiblesses
 		damage *= 1.2;
 	else if (defender->strong_against == attacker->sigle)
@@ -84,10 +86,39 @@ int					ft_attack_unit(t_map **map, t_units *attacker, t_units *defender, int re
 		damage *= 1.8;
 	if (attacker->sigle == 'C' && defender->sigle == 'B')						// Charge de cavalerie contre archer
 		damage *= 2;
-	if (!retaliation && attacker->sigle != 'B' && defender->sigle == 'C');		// Si attaque d'infanterie contre cavalerie en défense
+	if (!retaliation && attacker->sigle != 'B' && defender->sigle == 'C')		// Si attaque d'infanterie contre cavalerie en défense
 		damage *= 1.3;
+	t_characters ptr = players[1];
 	defender->troops_in_unit -= damage;					// Application des dommages
-	if (!retaliation && ft_calculate_attack_range(map, defender, attacker) <= defender->attack_range)		// Le défenseur attaque à son tour
-		ft_attack_unit(map, defender, attacker, 1);
-	return (1);
+	if (attacker->troops_in_unit <= 0)					// Si les unités sont détruites
+	{
+		ft_unit_destroyed(map, &players[attacker->owner]);
+		unit_destroyed = 1;
+	}
+	if (defender->troops_in_unit <= 0)
+	{
+		ft_unit_destroyed(map, &players[defender->owner]);
+		unit_destroyed = 1;
+	}
+	if (!retaliation && !unit_destroyed && ft_calculate_attack_range(map, defender, attacker) <= defender->attack_range)		// Le défenseur attaque à son tour
+		ft_attack_unit(map, players, defender, attacker, 1);
+	return (3);
 }
+
+void				ft_unit_destroyed(t_map **map, t_characters *owner)
+{
+	int		i;
+	int		j;
+
+	for (i = 0; i < owner->nb_units_owned; i++)
+	{
+		if (owner->units_owned[i]->troops_in_unit <= 0)
+		{
+			map[owner->units_owned[i]->pos_y][owner->units_owned[i]->pos_x].unit_on_tile = NULL;
+			free(owner->units_owned[i]);
+			owner->nb_units_owned--;
+			for (j = i; j < owner->nb_units_owned; j++)
+				owner->units_owned[j] = owner->units_owned[j + 1];
+		}
+	}
+}	

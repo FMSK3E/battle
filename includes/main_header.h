@@ -57,7 +57,8 @@ typedef struct	s_units
 	int			pos_x;
 	int			pos_y;
 
-	int			used;
+	int			current_actions;
+	int			max_actions;
 }				t_units;
 
 typedef struct	s_characters
@@ -79,7 +80,7 @@ t_characters		*characters_init(void);
 t_map				**map_init(int map_size_x, int map_size_y);
 
 //					print_stuff.c
-void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int nb_players, int owner);
+void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int owner);
 int					ft_show_enemy(t_map **map, t_units *unit, int owner);
 char				*ft_select_font_color(t_map **map, int i, int j, int owner);
 char				*ft_select_background_color(t_map **map, char terrain);
@@ -92,14 +93,16 @@ t_units				*ft_pick_cavalry(t_map **map, int owner);
 t_units				*ft_pick_bowmen(t_map **map, int owner);
 
 //					menus.c
-int					main_menu(t_map **map, t_characters *players, int owner, int map_size_x, int map_size_y, int nb_players);
-void				units_manager_menu(t_map **map, t_characters *players, int owner, int *available_units);
-void				unit_menu(t_map **map, t_characters *players, t_units *unit, int owner, int *available_units, int id);
+int					main_menu(t_map **map, t_characters *players, int owner, int map_size_x, int map_size_y);
+void				units_manager_menu(t_map **map, t_characters *players, int owner, int *available_units, int map_size_x, int map_size_y);
+void				unit_menu(t_map **map, t_characters *players, t_units *unit, int owner, int *available_units, int id, int map_size_x, int map_size_y);
 
 //					unit.c
 int					ft_move_unit(t_map **map, t_characters *players, t_units *unit, int new_x, int new_y);
 int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit, int owner);
 int					ft_calculate_attack_range(t_map **map, t_units *unit, t_units *target);
-int					ft_attack_unit(t_map **map, t_units *attacker, t_units *defender, int retaliation);
+int					ft_attack_unit(t_map **map, t_characters *players, t_units *attacker, t_units *defender, int retaliation);
+void				ft_unit_destroyed(t_map **map, t_characters *owner);
+
 
 #endif
