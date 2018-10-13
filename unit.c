@@ -1,17 +1,14 @@
 #include "includes/main_header.h"
 
+/*
+	Fonction qui permet de bouger l'unité
+	Retourne 0 si impossible, 1 si possible
+	Le return correspond à la perte de points d'actions
+*/
 int					ft_move_unit(t_map **map, t_characters *players, t_units *unit, int new_x, int new_y)
 {
-	if (unit->pos_x + new_x < 0 || unit->pos_x + new_x > 19 || unit->pos_y + new_y < 0 || unit->pos_y + new_y > 19)		// On fait d'abord ce if pour s'assurer de ne pas tomber hors de la carte
-	{
-		printf("WARNING : You cannot move in this direction, you've reached map's borders !\n");
+	if ((unit->pos_x + new_x < 0 || unit->pos_x + new_x > 19 || unit->pos_y + new_y < 0 || unit->pos_y + new_y > 19) || map[unit->pos_y + new_y][unit->pos_x + new_x].unit_on_tile != NULL)	// Si il y a déjà une unitée sur la case voulue
 		return (0);
-	}
-	else if (map[unit->pos_y + new_y][unit->pos_x + new_x].unit_on_tile != NULL)	// Si il y a déjà une unitée sur la case voulue
-	{
-		printf("WARNING : An unit is already on the tile !\n");
-		return (0);
-	}
 	else				// Tout est bon, on change les positions de l'unité
 	{
 		map[unit->pos_y][unit->pos_x].unit_on_tile = NULL;
@@ -22,7 +19,13 @@ int					ft_move_unit(t_map **map, t_characters *players, t_units *unit, int new_
 	return (1);
 }
 
-int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit, int owner)
+/*
+	Liste dans un t_characters temp la liste des unités trouvées dans un rayon de 12x12 et ayant une distance inférieure à la portée de l'attaquant
+	Retourne la fonction d'attaque qui se lance si au moins une cible est trouvé et que le joueur décide d'attaquer
+	Le return correspond à la perte de points d'actions
+	La fonction d'attaque retourne 3
+*/
+int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit)
 {
 	int				i;
 	int				j;
@@ -36,14 +39,11 @@ int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit
 	{
 		for (j = unit->pos_x - 6; j < unit->pos_x + 6; j++)
 		{
-			if (i >= 0 && i <= 19 && j >= 0 && j <= 19)			// On s'assure de ne pas tomber hors de la carte
+			if ((i >= 0 && i <= 19 && j >= 0 && j <= 19) && map[i][j].unit_on_tile != NULL && map[i][j].unit_on_tile->owner != unit->owner && ft_calculate_attack_range(map[unit->pos_y][unit->pos_x], map[i][j], unit) == 1) // Si on trouve une unité à distance d'attaque on l'affiche et on la liste
 			{
-				if (map[i][j].unit_on_tile != NULL && map[i][j].unit_on_tile->owner != owner && ft_calculate_attack_range(map, unit, map[i][j].unit_on_tile) <= unit->attack_range) // Si on trouve une unité à distance d'attaque on l'affiche et on la liste
-				{
-						temp.units_owned[k] = map[i][j].unit_on_tile;
-						printf("---> Target %d - %s - %d/%d troops in unit - %dx / %dy\n", k + 1, temp.units_owned[k]->type, temp.units_owned[k]->troops_in_unit, temp.units_owned[k]->max_troops_in_unit, temp.units_owned[k]->pos_x, temp.units_owned[k]->pos_y);
-						k++;
-				}
+					temp.units_owned[k] = map[i][j].unit_on_tile;
+					printf("---> Target %d - %s - %d/%d troops in unit - %dx / %dy\n", k + 1, temp.units_owned[k]->type, temp.units_owned[k]->troops_in_unit, temp.units_owned[k]->max_troops_in_unit, temp.units_owned[k]->pos_x, temp.units_owned[k]->pos_y);
+					k++;
 			}
 		}
 	}
@@ -60,20 +60,39 @@ int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit
 	}
 }
 
-int					ft_calculate_attack_range(t_map **map, t_units *unit, t_units *target)
+/*
+	Calcul de la distance entre l'attaquant et la cible potentielle
+	Retourne 1 si une attaque est possible, 0 sinon
+*/
+int					ft_calculate_attack_range(t_map unit_tile, t_map target_tile, t_units *unit)
 {
-	int		range;
+	int		attack_range;
+	int		y_distance;
+	int		x_distance;
 
-	range = 1;
-	return (range);
+	attack_range = unit->attack_range;
+
+	if (unit_tile.height_level > target_tile.height_level && unit->sigle == 'B')		// On regarde si la portée de l'unité est affectée par le terrain
+		attack_range++;
+	if (unit_tile.height_level < target_tile.height_level && unit->sigle == 'B')
+		attack_range--;
+	for (y_distance = unit_tile.y - target_tile.y; y_distance < 0; y_distance = -y_distance);
+	for (x_distance = unit_tile.x - target_tile.x; x_distance < 0; x_distance = -x_distance);
+
+	if (x_distance <= attack_range && y_distance <= attack_range)
+		return (1);
+	return (0);
 }
 
+/*
+	Calcul des dommages et contre attaque de l'unité ennemie
+	int retaliation utilisé de façon récursive pour ne pas contre attaquer jusqu'à ce que mort s'ensuive
+	Retourne la perte de points d'actions du à l'attaque
+*/
 int					ft_attack_unit(t_map **map, t_characters *players, t_units *attacker, t_units *defender, int retaliation)
 {
 	int		damage;
-	int		unit_destroyed;			// Si une unité est détruite, pour éviter de lancer la fonction de contre attaque
 
-	unit_destroyed = 0;
 	damage = attacker->troops_in_unit / 5;
 	if (defender->weak_against == attacker->sigle)				// Forces - Faiblesses
 		damage *= 1.2;
@@ -88,24 +107,21 @@ int					ft_attack_unit(t_map **map, t_characters *players, t_units *attacker, t_
 		damage *= 2;
 	if (!retaliation && attacker->sigle != 'B' && defender->sigle == 'C')		// Si attaque d'infanterie contre cavalerie en défense
 		damage *= 1.3;
-	t_characters ptr = players[1];
+	if (!retaliation && map[attacker->pos_y][attacker->pos_x].height_level > map[defender->pos_y][defender->pos_x].height_level && attacker->sigle != 'B')		// Bonus ou malus de terrain
+		damage *= 1.2;
+	else if (!retaliation && map[attacker->pos_y][attacker->pos_x].height_level < map[defender->pos_y][defender->pos_x].height_level && attacker->sigle != 'B')
+		damage *= 0.8;
 	defender->troops_in_unit -= damage;					// Application des dommages
-	if (attacker->troops_in_unit <= 0)					// Si les unités sont détruites
-	{
-		ft_unit_destroyed(map, &players[attacker->owner]);
-		unit_destroyed = 1;
-	}
-	if (defender->troops_in_unit <= 0)
-	{
-		ft_unit_destroyed(map, &players[defender->owner]);
-		unit_destroyed = 1;
-	}
-	if (!retaliation && !unit_destroyed && ft_calculate_attack_range(map, defender, attacker) <= defender->attack_range)		// Le défenseur attaque à son tour
+	if (!ft_unit_destroyed(map, &players[defender->owner]) && !retaliation && ft_calculate_attack_range(map[defender->pos_y][defender->pos_x], map[attacker->pos_y][defender->pos_x], defender) == 1)		// Le défenseur attaque à son tour
 		ft_attack_unit(map, players, defender, attacker, 1);
 	return (3);
 }
 
-void				ft_unit_destroyed(t_map **map, t_characters *owner)
+/*
+	On utilise cette fonction après chaque attaque pour voir une des unités ayant participé au combat est détruite
+	La fonction retourne 1 si l'unité est détruite (ça bloque la contre attaque, forcément) et 0 si ce n'est pas le cas
+*/
+int					ft_unit_destroyed(t_map **map, t_characters *owner)
 {
 	int		i;
 	int		j;
@@ -119,6 +135,8 @@ void				ft_unit_destroyed(t_map **map, t_characters *owner)
 			owner->nb_units_owned--;
 			for (j = i; j < owner->nb_units_owned; j++)
 				owner->units_owned[j] = owner->units_owned[j + 1];
+			return (1);
 		}
 	}
-}	
+	return (0);
+}

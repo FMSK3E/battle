@@ -1,5 +1,9 @@
 #include "includes/main_header.h"
 
+/*
+	Permet de choisir le nombre d'unités que l'on veut, puis le type de l'unité qui sera rediriger vers une des fonction de création ci-dessous
+	int owner = utiliser pour les fonction plus bas
+*/
 void				ft_pick_units_players(t_map **map, t_characters *players, int owner)
 {
 	int		i;
@@ -19,7 +23,8 @@ void				ft_pick_units_players(t_map **map, t_characters *players, int owner)
 		for (i = 0; i < nb_units; i++)
 		{
 			printf("\n\nUnit %d :\n", i + 1);
-			scanf("%s", answer);
+			//scanf("%s", answer);
+			strcpy(answer, "S");
 			if (strstr(answer, "S") || strstr(answer, "s"))
 				players[owner].units_owned[i] = ft_pick_swordsmen(map, owner);
 			else if (strstr(answer, "L") || strstr(answer, "l"))
@@ -32,15 +37,12 @@ void				ft_pick_units_players(t_map **map, t_characters *players, int owner)
 				i--;
 		}
 		nb_units = 0;	// Sinon, quand il y a deux joueurs, le jeu prend en suppose qu'il y a le même nombres de soldats et ne redemande pas
-		//	TESTS : l'unité est bien assignée à la carte et au personnage, quand on NULL sur la carte ça marche segfault si on cherche à y accéder mais ça ne casse pas le personnage || quand on change quelque chose sur la carte ça ou le joueur ça fait sur l'autre aussi
-		/*
-		printf("%d\n", players[i].units_owned[j - 1]->pos_y);
-		printf("%d\n", map[0][7].unit_on_tile->pos_y);
-		map[0][7].unit_on_tile = NULL;
-		printf("%d\n", players[i].units_owned[j - 1]->pos_y);
-		printf("%d\n", map[0][7].unit_on_tile->pos_y);*/
 }
 
+/*
+	Fonctions pour attribuer des données et une position à la nouvelle unité
+	int owner = attribuer un propriétaire à l'unité
+*/
 t_units				*ft_pick_swordsmen(t_map **map, int owner)
 {
 	t_units			*unit;
@@ -65,7 +67,8 @@ t_units				*ft_pick_swordsmen(t_map **map, int owner)
 	while (!pos_ok)
 	{
 		scanf("%s %s", x, y);
-		if (((owner == 0 && atoi(y) >= 0 && atoi(y) <= 7) || (owner == 1 && atoi(y) >= 12 && atoi(y) <= 19)) && map[atoi(y)][atoi(x)].unit_on_tile == NULL)
+		//if (((owner == 0 && atoi(y) >= 0 && atoi(y) <= 7) || (owner == 1 && atoi(y) >= 12 && atoi(y) <= 19)) && map[atoi(y)][atoi(x)].unit_on_tile == NULL)
+		if (map[atoi(y)][atoi(x)].unit_on_tile == NULL)
 		{
 			unit->pos_x = atoi(x);
 			unit->pos_y = atoi(y);

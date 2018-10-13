@@ -4,9 +4,9 @@ void				f(t_map **map, t_characters *players, int nb_players, int map_size_x, in
 {
 	while (players[0].nb_units_owned != 0 || players[1].nb_units_owned != 0)
 	{
-		while (main_menu(map, players, 0, map_size_x, map_size_y) != 1);
+		while (main_menu(map, players, &players[0], 0, map_size_x, map_size_y) != 1);
 		if (nb_players == 2)
-			while(main_menu(map, players, 1, map_size_x, map_size_y) != 1);
+			while(main_menu(map, players, &players[1], 1, map_size_x, map_size_y) != 1);
 		//else
 	}
 }
@@ -14,11 +14,12 @@ void				f(t_map **map, t_characters *players, int nb_players, int map_size_x, in
 int					main(void)
 {
 	/* TODO
+	une vraie carte
 	Plus de paramètres pour les troupes
 	Fonction d'attaque plus développée ?
-	Fonction de calcul de range
 	IA
 	*/
+	srand(time(NULL));
 	int		i;
 	int		j;
 	int		map_size_x;
@@ -39,7 +40,7 @@ int					main(void)
 		printf("A FAIRE\n");
 	else
 		ft_pick_units_players(map, players, 1);
-	f(map, players, nb_players, map_size_x, map_size_y);	
+	f(map, players, nb_players, map_size_x, map_size_y);
 
 	for (i = 0; i < 2; i++)
 		for (j = 0; j < 10; j++)

@@ -71,8 +71,10 @@ typedef struct	s_characters
 typedef struct	s_map
 {
 	t_units		*unit_on_tile;
-	int			spotting_range_bonus;
+	int			height_level;
 	char		terrain;
+	int			x;
+	int			y;
 }				t_map;
 
 //					stuctures_init.c
@@ -80,9 +82,9 @@ t_characters		*characters_init(void);
 t_map				**map_init(int map_size_x, int map_size_y);
 
 //					print_stuff.c
-void				ft_print_map(t_map **map, int map_size_x, int map_size_y, int owner);
+void				ft_print_map(t_map **map, t_units *unit, int map_size_x, int map_size_y, int owner);
 int					ft_show_enemy(t_map **map, t_units *unit, int owner);
-char				*ft_select_font_color(t_map **map, int i, int j, int owner);
+char				*ft_select_font_color(t_map **map, t_units *unit, int i, int j, int owner);
 char				*ft_select_background_color(t_map **map, char terrain);
 
 //					pick_stuff.c
@@ -93,16 +95,16 @@ t_units				*ft_pick_cavalry(t_map **map, int owner);
 t_units				*ft_pick_bowmen(t_map **map, int owner);
 
 //					menus.c
-int					main_menu(t_map **map, t_characters *players, int owner, int map_size_x, int map_size_y);
-void				units_manager_menu(t_map **map, t_characters *players, int owner, int *available_units, int map_size_x, int map_size_y);
-void				unit_menu(t_map **map, t_characters *players, t_units *unit, int owner, int *available_units, int id, int map_size_x, int map_size_y);
+int					main_menu(t_map **map, t_characters *players, t_characters *player, int owner, int map_size_x, int map_size_y);
+void				units_manager_menu(t_map **map, t_characters *players, t_characters *player, int owner, int *available_units, int map_size_x, int map_size_y);
+void				unit_menu(t_map **map, t_characters *players, t_characters *player, t_units *unit, int owner, int *available_units, int id, int map_size_x, int map_size_y);
 
 //					unit.c
 int					ft_move_unit(t_map **map, t_characters *players, t_units *unit, int new_x, int new_y);
-int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit, int owner);
-int					ft_calculate_attack_range(t_map **map, t_units *unit, t_units *target);
+int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit);
+int					ft_calculate_attack_range(t_map unit_tile, t_map target_tile, t_units *unit);
 int					ft_attack_unit(t_map **map, t_characters *players, t_units *attacker, t_units *defender, int retaliation);
-void				ft_unit_destroyed(t_map **map, t_characters *owner);
+int					ft_unit_destroyed(t_map **map, t_characters *owner);
 
 
 #endif
