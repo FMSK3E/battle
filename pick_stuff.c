@@ -20,12 +20,11 @@ void				ft_pick_units_players(t_map **map, t_characters *players, int owner, int
 		if (nb_units >= 1 && nb_units <= 7) // MIS A 1 POUR DES TESTS, A MODIFIER APRES
 			players[owner].nb_units_owned = nb_units;	
 	}
-	printf("Pick the troops you want on the battlefield :\n\tS : Swordsmen : strong against Lancers and weak against Bowmen !\n\tL : Lancers : strong against Cavalry and weak against Swordsmen !\n\tC : Cavalry : strong against Bowmen and weak against Lancers !\n\tB : Bowmen : strong against Swordsmen and weak against Cavalry !\n");
 		for (i = 0; i < nb_units; i++)
 		{
 			clear_screen();
 			ft_print_map(map, NULL, map_size_x, map_size_y, owner);
-			printf("\nUnit %d :\n", i + 1);
+			printf("Pick the troops you want on the battlefield :\n\tS : Swordsmen : strong against Lancers and weak against Bowmen !\n\tL : Lancers : strong against Cavalry and weak against Swordsmen !\n\tC : Cavalry : strong against Bowmen and weak against Lancers !\n\tB : Bowmen : strong against Swordsmen and weak against Cavalry !\n\nUnit %d :\n", i + 1);
 			//scanf("%s", answer);
 			strcpy(answer, "S");
 			if (strstr(answer, "S") || strstr(answer, "s"))
@@ -39,7 +38,7 @@ void				ft_pick_units_players(t_map **map, t_characters *players, int owner, int
 			if (!(strstr(answer, "S") || strstr(answer, "s") || strstr(answer, "L") || strstr(answer, "l") || strstr(answer, "C") || strstr(answer, "c") || strstr(answer, "B") || strstr(answer, "b")))
 				i--;
 		}
-		nb_units = 0;	// Sinon, quand il y a deux joueurs, le jeu prend en suppose qu'il y a le même nombres de soldats et ne redemande pas
+		nb_units = 0;	// Sinon, quand il y a deux joueurs, le jeu suppose qu'il y a le même nombre d'unités et ne redemande pas
 }
 
 /*

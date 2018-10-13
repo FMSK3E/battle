@@ -53,6 +53,11 @@ void				units_manager_menu(t_map **map, t_characters *players, t_characters *pla
 	{
 		if (!(*available_troops))
 			return;
+		if (player->nb_units_owned == 1)	
+		{
+			unit_menu(map, players, player, player->units_owned[0], owner, available_troops, 1, map_size_x, map_size_y);
+			return;
+		}
 		clear_screen();
 		ft_print_map(map, NULL, map_size_x, map_size_y, owner);
 		printf("\n-------------------------Troops menu, select an action : %d unit(s) waiting your order\n\t1-9 to select one of your units\n\t0 to go back to the main menu\n\n\nAvailable troops :\n", *available_troops);
@@ -73,7 +78,7 @@ void				units_manager_menu(t_map **map, t_characters *players, t_characters *pla
 	int		map_size_x/y		= Pour afficher la carte
 	
 */
-int					main_menu(t_map **map, t_characters *players, t_characters *player, int owner, int map_size_x, int map_size_y)
+int					main_menu(t_map **map, t_characters *players, t_characters *player, int owner, int nb_players, int map_size_x, int map_size_y)
 {
 	int		i;
 	int		available_troops;
@@ -83,6 +88,12 @@ int					main_menu(t_map **map, t_characters *players, t_characters *player, int 
 	while(1)
 	{
 		clear_screen();
+		if (nb_players == 1 && !available_troops)
+		{
+			for (i = 0; i < player->nb_units_owned; i++)
+				player->units_owned[i]->current_actions = player->units_owned[i]->max_actions;
+			return (1);
+		}
 		ft_print_map(map, NULL, map_size_x, map_size_y, owner);
 		printf("\n----------------------------------------Main menu, current player : Player %d", player->id + 1);
 		if (!available_troops)

@@ -37,6 +37,7 @@ void				w(t_map **map, int y, int x)
 		temp_y = y + tab_y[i];
 		if (temp_x >= 0 && temp_x <= 19 && temp_y >= 0 && temp_y <= 19 && map[temp_y][temp_x].structure_on_tile == false)
 		{
+			map[temp_y][temp_x].height_level = 1;
 			map[temp_y][temp_x].terrain = 'W';
 			map[temp_y][temp_x].structure_on_tile = true;
 		}
@@ -58,6 +59,7 @@ void				p(t_map **map, int y, int x)
 		temp_y = y + tab_y[i];
 		if (temp_x >= 0 && temp_x <= 19 && temp_y >= 0 && temp_y <= 19 && map[temp_y][temp_x].structure_on_tile == false)
 		{
+			map[temp_y][temp_x].height_level = 1;
 			map[temp_y][temp_x].terrain = 'P';
 			map[temp_y][temp_x].structure_on_tile = true;
 		}
@@ -79,6 +81,7 @@ void				f(t_map **map, int y, int x)
 		temp_y = y + tab_y[i];
 		if (temp_x >= 0 && temp_x <= 19 && temp_y >= 0 && temp_y <= 19 && map[temp_y][temp_x].structure_on_tile == false)
 		{
+			map[temp_y][temp_x].height_level = 1;
 			map[temp_y][temp_x].terrain = 'F';
 			map[temp_y][temp_x].structure_on_tile = true;
 		}
@@ -100,6 +103,7 @@ void				h(t_map **map, int y, int x)
 		temp_y = y + tab_y[i];
 		if (temp_x >= 0 && temp_x <= 19 && temp_y >= 0 && temp_y <= 19 && map[temp_y][temp_x].structure_on_tile == false)
 		{
+			map[temp_y][temp_x].height_level = 2;
 			map[temp_y][temp_x].terrain = 'H';
 			map[temp_y][temp_x].structure_on_tile = true;
 		}
@@ -127,30 +131,22 @@ t_map				**map_init(int map_size_x, int map_size_y)
 	{
 		for (j = 0; j < map_size_x; j++)
 		{
-			random = rand() % 4;
+			random = rand() % 8;
 			map[i][j].unit_on_tile = NULL;
 			map[i][j].x = j;
 			map[i][j].y = i;
 			if (map[i][j].structure_on_tile == false)
 			{
 				if (random <= 2)
-				{
-					map[i][j].height_level = 1;
-					if (random == 0)
-						p(map, i, j);
-					else if (random == 1)
-						w(map, i, j);
-					else if (random == 2)
-						f(map, i, j);
-				}
-				else if (random == 3)
-				{
+					p(map, i, j);
+				else if (random == 3 || random == 4)
+					w(map, i, j);
+				else if (random == 5 || random == 6)
+					f(map, i, j);
+				else if (random == 7)
 					h(map, i, j);
-					map[i][j].height_level = 2;
-				}
 			}
 		}
 	}
 	return (map);
 }
-

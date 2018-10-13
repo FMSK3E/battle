@@ -7,9 +7,9 @@ void				turns(t_map **map, t_characters *players, int nb_players, int map_size_x
 {
 	while (players[0].nb_units_owned != 0 || players[1].nb_units_owned != 0)
 	{
-		while (main_menu(map, players, &players[0], 0, map_size_x, map_size_y) != 1);
+		while (main_menu(map, players, &players[0], 0, nb_players, map_size_x, map_size_y) != 1);
 		if (nb_players == 2)
-			while(main_menu(map, players, &players[1], 1, map_size_x, map_size_y) != 1);
+			while(main_menu(map, players, &players[1], 1, nb_players, map_size_x, map_size_y) != 1);
 		//else
 	}
 }

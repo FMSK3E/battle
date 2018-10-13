@@ -13,7 +13,7 @@ int					ft_move_unit(t_map **map, t_characters *players, t_units *unit, int new_
 	if ((unit->pos_x + new_x < 0 || unit->pos_x + new_x > 19 || unit->pos_y + new_y < 0 || unit->pos_y + new_y > 19) || map[unit->pos_y + new_y][unit->pos_x + new_x].unit_on_tile != NULL)	// On retourne 0 s'il y a un pb
 		return (cost);
 	cost = 1;
-	if (map[unit->pos_y][unit->pos_x].height_level <= map[unit->pos_y + new_y][unit->pos_x + new_x].height_level || map[unit->pos_y + new_y][unit->pos_x + new_x].terrain == 'W')
+	if (map[unit->pos_y][unit->pos_x].height_level < map[unit->pos_y + new_y][unit->pos_x + new_x].height_level || map[unit->pos_y + new_y][unit->pos_x + new_x].terrain == 'W')
 		cost++;
 	map[unit->pos_y][unit->pos_x].unit_on_tile = NULL;
 	unit->pos_x += new_x;

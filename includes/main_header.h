@@ -98,7 +98,7 @@ t_units				*ft_pick_cavalry(t_map **map, int owner);
 t_units				*ft_pick_bowmen(t_map **map, int owner);
 
 //					menus.c
-int					main_menu(t_map **map, t_characters *players, t_characters *player, int owner, int map_size_x, int map_size_y);
+int					main_menu(t_map **map, t_characters *players, t_characters *player, int owner, int nb_players, int map_size_x, int map_size_y);
 void				units_manager_menu(t_map **map, t_characters *players, t_characters *player, int owner, int *available_units, int map_size_x, int map_size_y);
 void				unit_menu(t_map **map, t_characters *players, t_characters *player, t_units *unit, int owner, int *available_units, int id, int map_size_x, int map_size_y);
 
