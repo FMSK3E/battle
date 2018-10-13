@@ -41,6 +41,8 @@
 #define BACKGROUND_LIGHT_MAGENTA	"\e[105m"
 #define BACKGROUND_LIGHT_CYAN		"\e[106m"
 
+typedef enum { false, true } bool;
+
 typedef struct	s_units
 {
 	char		type[10];
@@ -73,6 +75,7 @@ typedef struct	s_map
 	t_units		*unit_on_tile;
 	int			height_level;
 	char		terrain;
+	bool		structure_on_tile;
 	int			x;
 	int			y;
 }				t_map;
@@ -88,7 +91,7 @@ char				*ft_select_font_color(t_map **map, t_units *unit, int i, int j, int owne
 char				*ft_select_background_color(t_map **map, char terrain);
 
 //					pick_stuff.c
-void				ft_pick_units_players(t_map **map, t_characters *players, int owner);
+void				ft_pick_units_players(t_map **map, t_characters *players, int owner, int map_size_x, int map_size_y);
 t_units				*ft_pick_swordsmen(t_map **map, int owner);
 t_units				*ft_pick_lancers(t_map **map, int owner);
 t_units				*ft_pick_cavalry(t_map **map, int owner);

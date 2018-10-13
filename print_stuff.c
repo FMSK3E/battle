@@ -19,7 +19,7 @@ void				ft_print_map(t_map **map, t_units *unit, int map_size_x, int map_size_y,
 			if (map[i][j].unit_on_tile != NULL && (map[i][j].unit_on_tile->owner == owner || (map[i][j].unit_on_tile->owner == !owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner) == 1)))
 				printf("%s%s%c ", ft_select_font_color(map, unit, i, j, owner), ft_select_background_color(map, map[i][j].terrain), map[i][j].unit_on_tile->sigle);
 			else
-				printf("%s%s* ", ft_select_font_color(map, unit, i, j, owner), ft_select_background_color(map, map[i][j].terrain));
+				printf("%s%s  ", ft_select_font_color(map, unit, i, j, owner), ft_select_background_color(map, map[i][j].terrain));
 		}
 		printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 		owner = 1;
@@ -28,7 +28,7 @@ void				ft_print_map(t_map **map, t_units *unit, int map_size_x, int map_size_y,
 			if (map[i][j].unit_on_tile != NULL && (map[i][j].unit_on_tile->owner == owner || (map[i][j].unit_on_tile->owner == !owner && ft_show_enemy(map, map[i][j].unit_on_tile, owner) == 1)))
 				printf("%s%s%c ", ft_select_font_color(map, unit, i, j, owner), ft_select_background_color(map, map[i][j].terrain), map[i][j].unit_on_tile->sigle);
 			else
-				printf("%s%s* ", ft_select_font_color(map, unit, i, j, owner), ft_select_background_color(map, map[i][j].terrain));
+				printf("%s%s  ", ft_select_font_color(map, unit, i, j, owner), ft_select_background_color(map, map[i][j].terrain));
 		}
 		printf("\n");
 	}

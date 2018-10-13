@@ -2,21 +2,25 @@
 
 /*
 	Fonction qui permet de bouger l'unité
-	Retourne 0 si impossible, 1 si possible
+	Retourne 0 si impossible
 	Le return correspond à la perte de points d'actions
 */
 int					ft_move_unit(t_map **map, t_characters *players, t_units *unit, int new_x, int new_y)
 {
-	if ((unit->pos_x + new_x < 0 || unit->pos_x + new_x > 19 || unit->pos_y + new_y < 0 || unit->pos_y + new_y > 19) || map[unit->pos_y + new_y][unit->pos_x + new_x].unit_on_tile != NULL)	// Si il y a déjà une unitée sur la case voulue
-		return (0);
-	else				// Tout est bon, on change les positions de l'unité
-	{
-		map[unit->pos_y][unit->pos_x].unit_on_tile = NULL;
-		unit->pos_x += new_x;
-		unit->pos_y += new_y;
-		map[unit->pos_y][unit->pos_x].unit_on_tile = unit;
-	}
-	return (1);
+	int		cost;
+
+	cost = 0;
+	if ((unit->pos_x + new_x < 0 || unit->pos_x + new_x > 19 || unit->pos_y + new_y < 0 || unit->pos_y + new_y > 19) || map[unit->pos_y + new_y][unit->pos_x + new_x].unit_on_tile != NULL)	// On retourne 0 s'il y a un pb
+		return (cost);
+	cost = 1;
+	if (map[unit->pos_y][unit->pos_x].height_level <= map[unit->pos_y + new_y][unit->pos_x + new_x].height_level || map[unit->pos_y + new_y][unit->pos_x + new_x].terrain == 'W')
+		cost++;
+	map[unit->pos_y][unit->pos_x].unit_on_tile = NULL;
+	unit->pos_x += new_x;
+	unit->pos_y += new_y;
+	map[unit->pos_y][unit->pos_x].unit_on_tile = unit;
+
+	return (cost);
 }
 
 /*

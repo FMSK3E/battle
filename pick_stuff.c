@@ -4,13 +4,14 @@
 	Permet de choisir le nombre d'unités que l'on veut, puis le type de l'unité qui sera rediriger vers une des fonction de création ci-dessous
 	int owner = utiliser pour les fonction plus bas
 */
-void				ft_pick_units_players(t_map **map, t_characters *players, int owner)
+void				ft_pick_units_players(t_map **map, t_characters *players, int owner, int map_size_x, int map_size_y)
 {
 	int		i;
 	int		nb_units;
 	char	answer[5];
 
 	clear_screen();
+	ft_print_map(map, NULL, map_size_x, map_size_y, owner);
 	printf("\n----------Player %d :\nHow many units do you want ? The minimum is 3 and the max is 7 !\n\n", owner + 1);
 	while (!(nb_units >= 1 && nb_units <= 7))
 	{
@@ -22,7 +23,9 @@ void				ft_pick_units_players(t_map **map, t_characters *players, int owner)
 	printf("Pick the troops you want on the battlefield :\n\tS : Swordsmen : strong against Lancers and weak against Bowmen !\n\tL : Lancers : strong against Cavalry and weak against Swordsmen !\n\tC : Cavalry : strong against Bowmen and weak against Lancers !\n\tB : Bowmen : strong against Swordsmen and weak against Cavalry !\n");
 		for (i = 0; i < nb_units; i++)
 		{
-			printf("\n\nUnit %d :\n", i + 1);
+			clear_screen();
+			ft_print_map(map, NULL, map_size_x, map_size_y, owner);
+			printf("\nUnit %d :\n", i + 1);
 			//scanf("%s", answer);
 			strcpy(answer, "S");
 			if (strstr(answer, "S") || strstr(answer, "s"))
