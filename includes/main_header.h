@@ -76,6 +76,7 @@ typedef struct	s_map
 	int			height_level;
 	char		terrain;
 	bool		structure_on_tile;
+	int			structure_number;
 	int			x;
 	int			y;
 }				t_map;
@@ -108,6 +109,13 @@ int					ft_find_unit_to_attack(t_map **map, t_characters *players, t_units *unit
 int					ft_calculate_attack_range(t_map unit_tile, t_map target_tile, t_units *unit);
 int					ft_attack_unit(t_map **map, t_characters *players, t_units *attacker, t_units *defender, int retaliation);
 int					ft_unit_destroyed(t_map **map, t_characters *owner);
+
+//					map_structures/water.c
+void				plains(t_map **map, int y, int x);
+void				water(t_map **map, int y, int x);
+void				forests(t_map **map, int y, int x);
+void				hills(t_map **map, int y, int x);
+
 
 
 #endif
